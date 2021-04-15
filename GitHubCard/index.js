@@ -9,7 +9,8 @@ const card = document.querySelector('.cards');
 axios.get('https://api.github.com/users/chavionjackson')
   .then(response => {
     const info = response.data;
-    const create = cardMaker(info);
+    const create = theCards(info);
+    const card = document.querySelector('.cards');
     card.appendChild(create);
   })
 
@@ -48,7 +49,7 @@ const followersArray = [
 followersArray.forEach(item => {
   axios.get(`${item}`)  
   .then(response => {
-  const newCard = cardMaker(response.data);
+  const newCard = theCards(response.data);
   card.appendChild(newCard);
   });
 })
@@ -73,65 +74,57 @@ followersArray.forEach(item => {
     </div>
 */
 
-const cardMaker = (object) => {
-  const cardDiv = document.createElement('div');
-  cardDiv.classList.add('card');
+const theCards = (object) => {
+  const div = document.createElement('div');
+  div.classList.add('card');
 
   const img = document.createElement('img');
-  img.setAttribute('src', object.avatar_url);
-  // cardDiv.appendChild(img);
+  img.src = object.avatar_url;
 
-  const infoDiv = document.createElement('div');
-  infoDiv.classList.add('card-info');
-  // cardDiv.appendChild(infoDiv);
+  const div2 = document.createElement('div');
+  div2.classList.add('card-info');
 
-  const name = document.createElement('h3');
-  name.classList.add('name');
-  name.textContent = object.name;
-  // infoDiv.appendChild(name)
+  const h3 = document.createElement('h3');
+  h3.classList.add('name');
+  h3.textContent = object.name;
 
-  const username = document.createElement('p');
-  username.classList.add('username');
-  username.textContent = object.login;
-  // infoDiv.appendChild(username);
+  const p1 = document.createElement('p');
+  p1.classList.add('username');
+  p1.textContent = object.login;
 
-  const location = document.createElement('p');
-  location.textContent = `Location: ${object.location}`;
-  // infoDiv.appendChild(location);
+  const p2 = document.createElement('p');
+  p2.textContent = `Location: ${object.location}`;
 
-  const profile = document.createElement('p');
-  profile.textContent = `Profile: ${object.url}`
-  // infoDiv.appendChild(profile);
+  const p3 = document.createElement('p');
+  p3.textContent = `Profile: ${object.url}`;
 
   const a = document.createElement('a');
-  a.setAttribute('href', object.url);
-  // profile.appendChild(a);
+  a.href = `${object.url}`; 
 
-  const followers = document.createElement('p');
-  followers.textContent = `Followers: ${object.followers}`;
-  // infoDiv.appendChild(followers);
+  const p4 = document.createElement('p');
+  p4.textContent = `Followers: ${object.followers}`;
 
-  const following = document.createElement('p');
-  following.textContent = `Following: ${object.following}`;
-  // infoDiv.appendChild(following);
+  const p5 = document.createElement('p');
+  p5.textContent = `Following: ${object.following}`;
 
-  const bio = document.createElement('p');
-  bio.textContent = `Bio: ${object.bio}`;
-
-  cardDiv.appendChild(img);
-  cardDiv.appendChild(infoDiv);
-  infoDiv.appendChild(name);
-  infoDiv.appendChild(username);
-  infoDiv.appendChild(location);
-  infoDiv.appendChild(profile);
-  profile.appendChild(a);
-  infoDiv.appendChild(followers);
-  infoDiv.appendChild(following);
-  infoDiv.appendChild(bio);
+  const p6 = document.createElement('p');
+  p6.textContent = `Bio: ${object.bio}`;
 
 
-  // console.log(cardDiv);
-  return cardDiv;
+
+
+  div.appendChild(img);
+  div.appendChild(div2);   
+  div2.appendChild(h3);   
+  div2.appendChild(p1);   
+  div2.appendChild(p2);   
+  div2.appendChild(p3);   
+  p3.appendChild(a);   
+  div2.appendChild(p4);   
+  div2.appendChild(p5);   
+  div2.appendChild(p6);   
+
+  return div;
 }
 
 /*
