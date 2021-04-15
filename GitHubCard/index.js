@@ -1,14 +1,15 @@
+import axios from 'axios';
+
 const card = document.querySelector('.cards');
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-// eslint-disable-next-line no-undef
 axios.get('https://api.github.com/users/chavionjackson')
   .then(response => {
     const info = response.data;
-    const create = theCards(info);
+    const create = cardMaker(info);
     card.appendChild(create);
   })
 
@@ -45,10 +46,9 @@ const followersArray = [
 ];
 
 followersArray.forEach(item => {
-  // eslint-disable-next-line no-undef
   axios.get(`${item}`)  
   .then(response => {
-  const newCard = theCards(response.data);
+  const newCard = cardMaker(response.data);
   card.appendChild(newCard);
   });
 })
@@ -73,48 +73,66 @@ followersArray.forEach(item => {
     </div>
 */
 
-const theCards = (object) => {
-  const div = document.createElement('div');
+const cardMaker = (object) => {
+  const cardDiv = document.createElement('div');
+  cardDiv.classList.add('card');
+
   const img = document.createElement('img');
-  const div2 = document.createElement('div');
-  const h3 = document.createElement('h3');
-  const p1 = document.createElement('p');
-  const p2 = document.createElement('p');
-  const p3 = document.createElement('p');
+  img.setAttribute('src', object.avatar_url);
+  // cardDiv.appendChild(img);
+
+  const infoDiv = document.createElement('div');
+  infoDiv.classList.add('card-info');
+  // cardDiv.appendChild(infoDiv);
+
+  const name = document.createElement('h3');
+  name.classList.add('name');
+  name.textContent = object.name;
+  // infoDiv.appendChild(name)
+
+  const username = document.createElement('p');
+  username.classList.add('username');
+  username.textContent = object.login;
+  // infoDiv.appendChild(username);
+
+  const location = document.createElement('p');
+  location.textContent = `Location: ${object.location}`;
+  // infoDiv.appendChild(location);
+
+  const profile = document.createElement('p');
+  profile.textContent = `Profile: ${object.url}`
+  // infoDiv.appendChild(profile);
+
   const a = document.createElement('a');
-  const p4 = document.createElement('p');
-  const p5 = document.createElement('p');
-  const p6 = document.createElement('p');
+  a.setAttribute('href', object.url);
+  // profile.appendChild(a);
 
-  div.classList.add('card');
-  div2.classList.add('card-info');
-  h3.classList.add('name');
-  p1.classList.add('username');
+  const followers = document.createElement('p');
+  followers.textContent = `Followers: ${object.followers}`;
+  // infoDiv.appendChild(followers);
 
-  img.src = object.avatar_url;
-  h3.textContent = object.name;
-  p1.textContent = object.login;
-  p2.textContent = `Location: ${object.location}`;
-  p3.textContent = `Profile: ${object.url}`;
-  a.href = `${object.url}`; 
-  p4.textContent = `Followers: ${object.followers}`;
-  p5.textContent = `Following: ${object.following}`;
-  p6.textContent = `Bio: ${object.bio}`;
+  const following = document.createElement('p');
+  following.textContent = `Following: ${object.following}`;
+  // infoDiv.appendChild(following);
 
-  div.appendChild(img);
-  div.appendChild(div2);   
-  div.appendChild(h3);   
-  div.appendChild(p1);   
-  div.appendChild(p2);   
-  div.appendChild(p3);   
-  div.appendChild(a);   
-  div.appendChild(p4);   
-  div.appendChild(p5);   
-  div.appendChild(p6);   
+  const bio = document.createElement('p');
+  bio.textContent = `Bio: ${object.bio}`;
 
-  return div;
+  cardDiv.appendChild(img);
+  cardDiv.appendChild(infoDiv);
+  infoDiv.appendChild(name);
+  infoDiv.appendChild(username);
+  infoDiv.appendChild(location);
+  infoDiv.appendChild(profile);
+  profile.appendChild(a);
+  infoDiv.appendChild(followers);
+  infoDiv.appendChild(following);
+  infoDiv.appendChild(bio);
+
+
+  // console.log(cardDiv);
+  return cardDiv;
 }
-
 
 /*
   List of LS Instructors Github username's:
