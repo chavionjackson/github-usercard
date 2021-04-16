@@ -1,16 +1,21 @@
+//Used second option to import data
 import axios from 'axios';
-
+//Grabbed .cards class from HTML
 const card = document.querySelector('.cards');
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+//Grabbed data from URL using axios
 axios.get('https://api.github.com/users/chavionjackson')
-  .then(response => {
-    const info = response.data;
-    const create = theCards(info);
-    const card = document.querySelector('.cards');
+  .then(res => {
+    //Created variable to grab data
+    const info = res.data;
+    //Created variable to grab the function containing users profiles and data
+    const create = newCards(info);
+    //Attached the created varibale to the DOM 
     card.appendChild(create);
   })
 
@@ -37,22 +42,26 @@ axios.get('https://api.github.com/users/chavionjackson')
     Using that array, iterate over it, requesting data for each user, creating a new card for each
     user, and adding that card to the DOM.
 */
-
+//Created array containing all of the user profiles
 const followersArray = [
   'https://api.github.com/users/tetondan',
   'https://api.github.com/users/dustinmyers',
   'https://api.github.com/users/justsml',
   'https://api.github.com/users/luishrd',
-  'https://api.github.com/users/bigknell',
-];
+  'https://api.github.com/users/bigknell'
+]
 
-followersArray.forEach(item => {
-  axios.get(`${item}`)  
-  .then(response => {
-  const newCard = theCards(response.data);
-  card.appendChild(newCard);
-  });
-})
+//Looped through the created array to create a new card for each user
+followersArray.forEach(user => {
+  //Used axios to grab the data from the profiles
+  axios.get(`${user}`)
+    .then(res => {
+      //Created variable for each card created containing the data
+      const others = newCards(res.data);
+      //Attached the created variable to the DOM
+      card.appendChild(others);
+    });
+});
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -73,8 +82,8 @@ followersArray.forEach(item => {
       </div>
     </div>
 */
-
-const theCards = (object) => {
+//Created a function to create all elements, classes and content in order
+const newCards = (object) => {
   const div = document.createElement('div');
   div.classList.add('card');
 
@@ -110,19 +119,17 @@ const theCards = (object) => {
   const p6 = document.createElement('p');
   p6.textContent = `Bio: ${object.bio}`;
 
-
-
-
+  //Attached all elements to the DOM
   div.appendChild(img);
-  div.appendChild(div2);   
-  div2.appendChild(h3);   
-  div2.appendChild(p1);   
-  div2.appendChild(p2);   
-  div2.appendChild(p3);   
-  p3.appendChild(a);   
-  div2.appendChild(p4);   
-  div2.appendChild(p5);   
-  div2.appendChild(p6);   
+  div.appendChild(div2);
+  div2.appendChild(h3);
+  div2.appendChild(p1);
+  div2.appendChild(p2);
+  div2.appendChild(p3);  
+  p3.appendChild(a);
+  div2.appendChild(p4);
+  div2.appendChild(p5);
+  div2.appendChild(p6);
 
   return div;
 }
