@@ -1,8 +1,23 @@
+//Used second option to import data
+import axios from 'axios';
+//Grabbed .cards class from HTML
+const card = document.querySelector('.cards');
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+//Grabbed data from URL using axios
+axios.get('https://api.github.com/users/chavionjackson')
+  .then(res => {
+    //Created variable to grab data
+    const info = res.data;
+    //Created variable to grab the function containing users profiles and data
+    const create = newCards(info);
+    //Attached the created varibale to the DOM 
+    card.appendChild(create);
+  })
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -27,8 +42,26 @@
     Using that array, iterate over it, requesting data for each user, creating a new card for each
     user, and adding that card to the DOM.
 */
+//Created array containing all of the user profiles
+const followersArray = [
+  'https://api.github.com/users/tetondan',
+  'https://api.github.com/users/dustinmyers',
+  'https://api.github.com/users/justsml',
+  'https://api.github.com/users/luishrd',
+  'https://api.github.com/users/bigknell'
+]
 
-const followersArray = [];
+//Looped through the created array to create a new card for each user
+followersArray.forEach(user => {
+  //Used axios to grab the data from the profiles
+  axios.get(`${user}`)
+    .then(res => {
+      //Created variable for each card created containing the data
+      const others = newCards(res.data);
+      //Attached the created variable to the DOM
+      card.appendChild(others);
+    });
+});
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +82,57 @@ const followersArray = [];
       </div>
     </div>
 */
+//Created a function to create all elements, classes and content in order
+const newCards = (object) => {
+  const div = document.createElement('div');
+  div.classList.add('card');
+
+  const img = document.createElement('img');
+  img.src = object.avatar_url;
+
+  const div2 = document.createElement('div');
+  div2.classList.add('card-info');
+
+  const h3 = document.createElement('h3');
+  h3.classList.add('name');
+  h3.textContent = object.name;
+
+  const p1 = document.createElement('p');
+  p1.classList.add('username');
+  p1.textContent = object.login;
+
+  const p2 = document.createElement('p');
+  p2.textContent = `Location: ${object.location}`;
+
+  const p3 = document.createElement('p');
+  p3.textContent = `Profile: ${object.url}`;
+
+  const a = document.createElement('a');
+  a.href = `${object.url}`; 
+
+  const p4 = document.createElement('p');
+  p4.textContent = `Followers: ${object.followers}`;
+
+  const p5 = document.createElement('p');
+  p5.textContent = `Following: ${object.following}`;
+
+  const p6 = document.createElement('p');
+  p6.textContent = `Bio: ${object.bio}`;
+
+  //Attached all elements to the DOM
+  div.appendChild(img);
+  div.appendChild(div2);
+  div2.appendChild(h3);
+  div2.appendChild(p1);
+  div2.appendChild(p2);
+  div2.appendChild(p3);  
+  p3.appendChild(a);
+  div2.appendChild(p4);
+  div2.appendChild(p5);
+  div2.appendChild(p6);
+
+  return div;
+}
 
 /*
   List of LS Instructors Github username's:
